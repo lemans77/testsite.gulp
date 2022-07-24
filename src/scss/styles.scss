@@ -281,3 +281,29 @@
   font-size: 1.875rem;
   margin-right: 0.3125rem;
 }
+
+/*
+==========================================
+ footer Design
+==========================================
+*/
+
+.footer {
+  background: var(--primary-color);
+}
+
+.footer .footer-link {
+  font-size: 1rem;
+  color: var(--white-color);
+  padding: 0 1.875rem;
+}
+
+.footer .footer-link:hover {
+  color: var(--white-color) !important;
+}
+
+.footer a i {
+  font-size: 1.5rem;
+  color: var(--white-color);
+  padding: 0 1rem;
+}
