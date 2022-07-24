@@ -56,4 +56,5 @@ function serve() {
   watch('src/js/**.js', series(scripts)).on('change', browserSync.reload)
 }
 
-exports.serve = series(clear, scss, html, serve)
+exports.serve = series(clear, scss, scripts, html, serve)
+exports.build = series(clear, scss, scripts, html)
