@@ -12,21 +12,12 @@ const imagemin = require('gulp-imagemin');
 const pngquant = require('imagemin-pngquant');
 const mozjpeg = require('imagemin-mozjpeg');
 const svgo = require('gulp-svgo');
+const hash = require('gulp-hash-filename');
+const gulpinject = require('gulp-inject');
 
 function clear() {
   return src('dist', {read: false, allowEmpty: true})
     .pipe(clean())
-}
-
-function html() {
-  return src('src/**.html')
-    .pipe(include({
-      prefix: '@@'
-    }))
-    .pipe(htmlmin({
-      collapseWhitespace: true
-    }))
-    .pipe(dest('dist'))
 }
 
 function scss() {
@@ -40,6 +31,9 @@ function scss() {
     }))
     .pipe(csso())
     .pipe(concat('index.css'))
+    .pipe(hash({
+      'format': '{name}.{hash:16}{ext}'
+    }))
     .pipe(dest('dist'))
 }
 
@@ -50,6 +44,9 @@ function scripts() {
     ])
     .pipe(concat('index.js'))
     .pipe(uglify())
+    .pipe(hash({
+      'format': '{name}.{hash:16}{ext}'
+    }))
     .pipe(dest('dist'))
 }
 
@@ -63,6 +60,28 @@ function images() {
     .pipe(dest('dist/assets/img'));
 }
 
+function inject() {
+  var target = src('dist/*.html')
+  var sources = src(['dist/*.js', 'dist/*.css'], {read: false})
+
+  return target.pipe(gulpinject(sources, {
+      ignorePath: 'dist',
+      relative: true
+    }))
+    .pipe(dest('dist'))
+}
+
+function html() {
+  return src('src/**.html')
+    .pipe(include({
+      prefix: '@@'
+    }))
+    .pipe(htmlmin({
+      collapseWhitespace: true
+    }))
+    .pipe(dest('dist'))
+}
+
 function serve() {
   browserSync.init({
     server: './dist',
@@ -74,5 +93,8 @@ function serve() {
   watch('src/img/**/*', images).on('change', browserSync.reload)
 }
 
-exports.serve = series(clear, scss, scripts, images, html, serve)
-exports.build = series(clear, scss, scripts, images, html)
+exports.serve = series(clear, scss, scripts, images, html, inject, serve)
+exports.build = series(clear, scss, scripts, images, html, inject)
+exports.scss = scss
+exports.inject = inject
+exports.scripts = scripts
