@@ -1,6 +1,7 @@
 const {src, dest, series, watch} = require('gulp');
 const browserSync = require('browser-sync').create();
 const concat = require('gulp-concat');
+const uglify = require('gulp-uglify-es').default;;
 
 function serve() {
   browserSync.init({
@@ -10,8 +11,12 @@ function serve() {
 }
 
 function scripts() {
-	return src('src/js/**.js')
+	return src([
+		'node_modules/jquery/dist/jquery.min.js',
+		'src/js/script.js'
+	])
 	.pipe(concat('index.js'))
+	.pipe(uglify())
 	.pipe(dest('dist'))
 }
 
