@@ -5,11 +5,15 @@ const browserSync = require('browser-sync').create();
 const concat = require('gulp-concat');
 const uglify = require('gulp-uglify-es').default;
 const include = require('gulp-file-include');
+const htmlmin = require('gulp-htmlmin');
 
 function html() {
   return src('src/**.html')
     .pipe(include({
       prefix: '@@'
+    }))
+    .pipe(htmlmin({
+      collapseWhitespace: true
     }))
     .pipe(dest('dist'))
 }
