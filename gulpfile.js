@@ -26,7 +26,10 @@ function html() {
 }
 
 function scss() {
-  return src('src/scss/**.scss')
+  return src([
+      'node_modules/bootstrap/scss/bootstrap.scss',
+      'src/scss/**.scss'
+    ])
     .pipe(sass())
     .pipe(autoprefixer({
       cascade: false
@@ -40,7 +43,7 @@ function scripts() {
   return src([
     'node_modules/jquery/dist/jquery.min.js',
     'src/js/script.js'
-  ])
+    ])
     .pipe(concat('index.js'))
     .pipe(uglify())
     .pipe(dest('dist'))
