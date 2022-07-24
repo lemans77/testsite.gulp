@@ -9,6 +9,11 @@ const htmlmin = require('gulp-htmlmin');
 const autoprefixer = require('gulp-autoprefixer');
 const clean = require('gulp-clean');
 
+function clear() {
+  return src('dist', {read: false, allowEmpty: true})
+    .pipe(clean())
+}
+
 function html() {
   return src('src/**.html')
     .pipe(include({
@@ -31,18 +36,6 @@ function scss() {
     .pipe(dest('dist'))
 }
 
-function clear() {
-  return src('dist', {read: false, allowEmpty: true})
-    .pipe(clean())
-}
-
-function serve() {
-  browserSync.init({
-    server: './dist',
-    port: 2140
-  })
-}
-
 function scripts() {
   return src([
     'node_modules/jquery/dist/jquery.min.js',
@@ -53,8 +46,14 @@ function scripts() {
     .pipe(dest('dist'))
 }
 
-exports.serve = series(serve)
-exports.scripts = series(scripts)
-exports.scss = scss
-exports.html = html
-exports.clear = clear
+function serve() {
+  browserSync.init({
+    server: './dist',
+    port: 2140
+  })
+  watch('src/**/**.html', series(html)).on('change', browserSync.reload)
+  watch('src/scss/**.scss', series(scss)).on('change', browserSync.reload)
+  watch('src/js/**.js', series(scripts)).on('change', browserSync.reload)
+}
+
+exports.serve = series(clear, scss, html, serve)
