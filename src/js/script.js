@@ -1,6 +1,1 @@
-const user = {
-  name: 'Oleg',
-  age: '35'
-}
-
-console.log(user)
+$('.block').html('<h2>Baked fresh daily by bakers with passion.</h2>');

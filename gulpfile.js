@@ -45,8 +45,8 @@ function scss() {
 
 function scripts() {
   return src([
-    'node_modules/jquery/dist/jquery.min.js',
-    'src/js/script.js'
+      'node_modules/jquery/dist/jquery.min.js',
+      'src/js/script.js'
     ])
     .pipe(concat('index.js'))
     .pipe(uglify())
