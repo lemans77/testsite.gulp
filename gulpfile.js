@@ -68,11 +68,11 @@ function serve() {
     server: './dist',
     port: 2140
   })
-  watch('src/**/**.html', series(html)).on('change', browserSync.reload)
-  watch('src/scss/**.scss', series(scss)).on('change', browserSync.reload)
-  watch('src/js/**.js', series(scripts)).on('change', browserSync.reload)
+  watch('src/**/**.html', html).on('change', browserSync.reload)
+  watch('src/scss/**.scss', scss).on('change', browserSync.reload)
+  watch('src/js/**.js', scripts).on('change', browserSync.reload)
+  watch('src/img/**/*', images).on('change', browserSync.reload)
 }
 
-exports.serve = series(clear, scss, scripts, html, serve)
+exports.serve = series(clear, scss, scripts, images, html, serve)
 exports.build = series(clear, scss, scripts, images, html)
-exports.images = images
