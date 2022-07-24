@@ -8,9 +8,6 @@ const uglify = require('gulp-uglify-es').default;;
 function scss() {
   return src('src/scss/**.scss')
     .pipe(sass())
-    .pipe(autoprefixer({
-      cascade: false
-    }))
     .pipe(csso())
     .pipe(concat('index.css'))
     .pipe(dest('dist'))
@@ -35,3 +32,4 @@ function scripts() {
 
 exports.serve = series(serve)
 exports.scripts = series(scripts)
+exports.scss = series(scss)
