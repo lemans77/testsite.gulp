@@ -6,6 +6,7 @@ const concat = require('gulp-concat');
 const uglify = require('gulp-uglify-es').default;
 const include = require('gulp-file-include');
 const htmlmin = require('gulp-htmlmin');
+const autoprefixer = require('gulp-autoprefixer');
 
 function html() {
   return src('src/**.html')
@@ -21,6 +22,9 @@ function html() {
 function scss() {
   return src('src/scss/**.scss')
     .pipe(sass())
+    .pipe(autoprefixer({
+      cascade: false
+    }))
     .pipe(csso())
     .pipe(concat('index.css'))
     .pipe(dest('dist'))
