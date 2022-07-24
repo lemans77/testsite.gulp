@@ -7,6 +7,7 @@ const uglify = require('gulp-uglify-es').default;
 const include = require('gulp-file-include');
 const htmlmin = require('gulp-htmlmin');
 const autoprefixer = require('gulp-autoprefixer');
+const clean = require('gulp-clean');
 
 function html() {
   return src('src/**.html')
@@ -30,6 +31,11 @@ function scss() {
     .pipe(dest('dist'))
 }
 
+function clear() {
+  return src('dist', {read: false, allowEmpty: true})
+    .pipe(clean())
+}
+
 function serve() {
   browserSync.init({
     server: './dist',
@@ -51,3 +57,4 @@ exports.serve = series(serve)
 exports.scripts = series(scripts)
 exports.scss = scss
 exports.html = html
+exports.clear = clear
