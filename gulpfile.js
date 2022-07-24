@@ -3,7 +3,16 @@ const sass = require('gulp-sass')(require('sass'));
 const csso = require('gulp-csso');
 const browserSync = require('browser-sync').create();
 const concat = require('gulp-concat');
-const uglify = require('gulp-uglify-es').default;;
+const uglify = require('gulp-uglify-es').default;
+const include = require('gulp-file-include');
+
+function html() {
+  return src('src/**.html')
+    .pipe(include({
+      prefix: '@@'
+    }))
+    .pipe(dest('dist'))
+}
 
 function scss() {
   return src('src/scss/**.scss')
@@ -15,7 +24,7 @@ function scss() {
 
 function serve() {
   browserSync.init({
-    server: './src',
+    server: './dist',
     port: 2140
   })
 }
@@ -32,4 +41,5 @@ function scripts() {
 
 exports.serve = series(serve)
 exports.scripts = series(scripts)
-exports.scss = series(scss)
+exports.scss = scss
+exports.html = html
