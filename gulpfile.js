@@ -8,6 +8,10 @@ const include = require('gulp-file-include');
 const htmlmin = require('gulp-htmlmin');
 const autoprefixer = require('gulp-autoprefixer');
 const clean = require('gulp-clean');
+const imagemin = require('gulp-imagemin');
+const pngquant = require('imagemin-pngquant');
+const mozjpeg = require('imagemin-mozjpeg');
+const svgo = require('gulp-svgo');
 
 function clear() {
   return src('dist', {read: false, allowEmpty: true})
@@ -49,6 +53,16 @@ function scripts() {
     .pipe(dest('dist'))
 }
 
+function images() {
+  return src('src/img/**/*')
+    .pipe(imagemin([
+      pngquant({quality: [0.5, 0.5]}),
+      mozjpeg({quality: 75, progressive: true})
+    ]))
+    .pipe(svgo())
+    .pipe(dest('dist/assets/img'));
+}
+
 function serve() {
   browserSync.init({
     server: './dist',
@@ -60,4 +74,5 @@ function serve() {
 }
 
 exports.serve = series(clear, scss, scripts, html, serve)
-exports.build = series(clear, scss, scripts, html)
+exports.build = series(clear, scss, scripts, images, html)
+exports.images = images
